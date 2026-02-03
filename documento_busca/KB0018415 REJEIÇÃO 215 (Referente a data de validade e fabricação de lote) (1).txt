@@ -1,0 +1,85 @@
+REJEIÇÃO 215 (Referente a data 
+de validade e fabricação de lote)  
+Orientação para quando a nota retorna do
+Sefaz com erro 215 apresentando o
+seguinte erro de referência:
+1
+2 Definições:
+Acessar a transação J1BNFE com o
+número da nota contendo 9 dígitos, data
+de emissão e empresa. No Painel de
+Faturamento, foi apresentada Nota Fiscal
+com rejeição 215.
+...
+2
+1
+
+REJEIÇÃO 215 (Referente a data 
+de validade e fabricação de lote)  
+2 Definições:
+Acessar a transação J1BNFE com o
+número da nota contendo 9 dígitos, data
+de emissão e empresa. No Painel de
+Faturamento, foi apresentada Nota Fiscal
+com rejeição 215.
+...
+2
+
+REJEIÇÃO 215 (Referente a data 
+de validade e fabricação de lote)  
+3
+Abrimos a Nota fiscal e na aba DadosNF-
+e copiamos a Chave de acesso,
+utilizamos o Site da HBNFE
+(http://172.22.5.193/#!/consulta-
+emitidos) para consultar o motivo da
+rejeição da nota.
+Será apresentado erro referente a data
+de validade do Lote
+...
+3
+
+REJEIÇÃO 215 (Referente a data 
+de validade e fabricação de lote)  
+4
+Estornar a Nota Fiscal através da
+transação J1BNFE – Marcar a linha da nota e
+clicar em “estornar”
+Realizar o estorno do movimento
+do estoque através da transação VL09 –
+(informar o número da delivery e processar
+o estorno) (Para realizar a VL09 é necessário
+realizar o estorno de todas as notas
+atreladas a delivery (PA e ATG)
+Acessar a transação MSC2N e
+informar a data de validade para Lote
+XXX(número do lote) do material YYY
+(número do material)
+...
+PASS0 A PASSO SOLUÇÃO
+Diante o cenário acima, será necessário ação do 
+usuário para:
+REJEIÇÃO 215 (Referente a data 
+de validade e fabricação de lote)  
+4
+Entrar na transação VL02N,
+expandir a partição de lote, clicar 2x na linha
+particionada, na aba “material” informar a
+data de validade/fabricação contendo
+mesma data informada no passo anterior
+Realizar o registro de saída de
+mercadorias (Registrar SM) pela transação
+VL02N
+Aguardar o faturamento
+automático
+...
+PASS0 A PASSO SOLUÇÃO
+Diante o cenário acima, será necessário ação do 
+usuário para:
+Verificar através do Fluxo de documentos se foi criado novo 
+faturamento e se a Nota consta autorizada.
+Caso ocorra Rejeição, refazer a validação da chave de acesso 
+utilizando site da HBNFE e verificar se é o mesmo erro. Caso 
+positivo, refazer os passos para correção. Caso a rejeição seja 
+outra, será necessário abertura de chamado devendo anexar tela 
+de Painel de faturamento para acionamento do Time de Suporte.

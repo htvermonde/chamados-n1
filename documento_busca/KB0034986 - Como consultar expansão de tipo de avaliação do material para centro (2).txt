@@ -1,0 +1,103 @@
+  SAP S4 Hana  Como consultar expansão de  tipo de 
+avaliação do material para centro KB0034986 
+   
+Problema: Situações em que o usuário tenta executar um processo de negócio e recebe uma 
+mensagem informando que o tipo de avaliação exemplo Q.PURCHASE não existe ou qualquer 
+outro tipo, ou registra um chamado relatando que deseja incluir o tipo de avaliação faltante para o 
+sistema SAP S/4HANA, com exceção dos casos de VLPOD para o tipo de avaliação OWN. 
+Ambiente: SAP S4P, SAP BRP e SAP MDG 
+Solução: Verificar na tabela MBEW (que armazena os dados de tipo de avaliação dos materiais por 
+centro) se existe um registro correspondente ao material informado pelo usuário e ao respectivo 
+centro. 
+ 
+Passo 1: É necessário iniciar a análise inicial, para obter as informações do código do material e 
+da planta no ambiente ECC para verificar inicialmente a expansão no sistema BRP, que atua como 
+sistema mandante. O time de MDG só pode proceder com a replicação caso os dados já existam 
+no BRP. Além disso, é necessário solicitar ao usuário o código do material e a planta no ambiente 
+S/4HANA. 
+  
+Passo 2: Vamos nos basear num caso onde o usuário deseja criar o tipo de avaliação PRODUCED 
+para um material específico, acessar o SAP BRP 
+  
+ 
+  
+Passo 3: Entrar com seu usuário e senha 
+
+ 
+Passo 4: Acessar transação ZX_SE16 
+  
+ 
+  
+  
+Passo 5: Digitar o nome da tabela “MBEW” e pressionar a tecla “ENTER” 
+
+ 
+  
+ Passo 6: Inserir o código do material ECC e a planta, e em seguida clicar no ícone de execução 
+exibido no exemplo abaixo. 
+ 
+  
+Passo 7: Caso a tabela não retorne tipo de avaliação solicitado, conforme ilustrado na imagem 
+abaixo dessa seção, o usuário deve ser orientado a entrar em contato com o time de CSC para que 
+
+a expansão seja realizada no ambiente ECC, uma vez que este é o sistema mandante, e os dados 
+não devem ser cadastrados diretamente no S/4HANA. 
+Existe um KB de contatos do ECC, organizado por tipo de problema, cujo link será disponibilizado 
+nas informações gerais. Após a expansão no ECC, o sistema requer um prazo de até 4 horas para 
+replicar as informações. Caso a replicação não ocorra após esse período, o usuário deve ser 
+instruído a registrar um novo ticket. 
+  
+ 
+ 
+Passo 8: Se o cenário acima retornar dados, devemos realizar o mesmo processo no ambiente 
+SAP MDG (GDP). 
+Passo 9: Acessar SAP MDG(GDP) 
+ 
+  
+
+Passo 10: Acessar a transação SE16 
+ 
+Passo 11: Digitar o nome da tabela “MBEW” e pressionar a tecla “ENTER” 
+ 
+Passo 12: Digitar o código do material S4, planta, e executar. 
+
+ 
+  
+Passo 13: Caso no MDG não exista o tipo de avaliação solicitado pelo usuário que no nosso caso 
+estamos buscando PRODUCED  conforme ilustrado na imagem abaixo, o chamado deve ser 
+encaminhado para a fila de MDG L2 para que seja realizado o estímulo no ECC. 
+  
+ 
+  
+Passo 14: Se no cenário acima forem exibidos dados, devemos acessar o SAP o S4 Hana (S4P) 
+
+ 
+Passo 15: Acessar transação SE16 
+ 
+  
+Passo 16: Digitar o nome da tabela “MBEW” e pressionar a tecla “ENTER” 
+  
+ 
+Passo 17: Digitar o código do material S4, planta, e pressionar o ícone execução: 
+  
+
+ 
+Passo 18: Caso não exista a avaliação solicitada no S4, que no nosso caso é PRODUCED, 
+conforme ilustrado na imagem abaixo, o chamado deve ser encaminhado para o time de MDG para 
+execução da replicação. 
+  
+ 
+  
+  
+Passo 19: Se forem exibidos dados, significa que o material está corretamente expandido e o 
+chamado deve ser encerrado. 
+  
+Informações gerais: 
+Link KB contatos CSC: https://abinbevww.service-
+now.com/abiex?id=kb_article_view&sysparm_article=KB0026409 
+Metadados:  
+Autor: Jaqueline Gomes 
+Data de criação: 20/01/2024 
+Data de modificação: 20/01/2024 
+ 
+

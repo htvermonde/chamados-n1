@@ -1,0 +1,163 @@
+  SAP S4 Hana Não Emissão de Cte - Causas KB0019150 
+  
+Problema: Não Emissão de Cte - Causas 
+Ambiente: SAP TM (STP) 
+Solução: 
+ 
+Passo 1: Acesse o aplicativo ‘’Exibir ordem de frete rodoviário’’ e coloque a ordem de frete que deseja analisar; 
+ 
+Passo 2: É necessário conferir se algumas informações estão preenchidas corretamente, como:  
+• Meio de Transporte; 
+• Veículo; 
+• Placa do Veículo; 
+• Agente de Frete (Transportadora); 
+• Motorista. 
+ 
+ 
+
+Passo 3: Nessa tela é possível conferir o Status de confirmação - Subcontratação, como exemplo podemos ver que um Status consta como 
+‘’Confirmado’’ e o outro como ‘’Ainda nenhuma confirmação’’; 
+ 
+Passo 4: Caso o Status conste como ‘’Ainda nenhuma confirmação’’ é necessário clicar em ‘’Subcontratação’’ e logo em seguida ‘’Definir 
+em Confirmado pelo agente de frete’’; 
+ 
+ 
+
+ 
+Passo 5: Um outro check bem importante é em relação aos custos do transporte. Para isso, é necessário acessar a aba ‘’Custos’’ e verificar se o 
+custo foi efetivamente calculado, caso contrário, o CTe não será emitido;  
+* Obs: Caso o custo não seja calculado de maneira automática ou tenha feito algum tipo de ajuste na Ordem de Frete, é possível recalcular a 
+tarifa do frete; 
+ 
+Passo 6: Dentro de uma ordem de frete é necessário conter os eventos referentes ao processo em questão desde o início até o fim. Dessa  forma, 
+deve-se conferir o status dos eventos na aba ‘’Execução’’, lembrando que, o não cumprimento ou a realização incorreta desta etapa irá acarretar 
+na não emissão do CTe; 
+ 
+ 
+ 
+
+Passo 7: Para conferir se o CTe foi emitido dentro da ordem de frete é necessário clicar na aba ‘’Etapas’’ e em seguida flegar a linha; 
+ 
+Passo 8: Após isso, clique em ‘’Referências de documento’’ e confira a Chave CTe. Caso exista a Chave e o CTe não foi imprimido, utilizar a 
+mesma no Unidocs para realizar a impressão; 
+ 
+Passo 9: Caso o custo não seja calculado de maneira automática, você poderá conferir se existe um custo cadastrado para essa situação em 
+específico. Para isso, é necessário entrar no aplicativo ‘’Atualizar tabela de preços de tarifa’’; 
+ 
+Passo 10: Clique no ‘’Matchcode’’; 
+ 
+Passo 11: Clique no ‘’Início’’; 
+ 
+
+ 
+Passo 12: Você pode selecionar qualquer uma dessas tabelas: 
+• TAB_FRT_OUT_TRIP; 
+• TAB_FRT_OUT_TRIP_FG; 
+• TAB_FRT_OUT_TRIP_RM. 
+ 
+Passo 13: Após isso, clique em ‘’Especificações de data e valores’’ e você irá encontrar algumas informações em relação ao custo da tarifa: 
+• Unidade gerencial (origem); 
+• Unidade gerencial (destino); 
+• Agente de frete (transportadora); 
+• Tipo de veículo. 
+OBS: É importante frisar que o custo da  tarifa de frete só existe se somente se essas quatro informações se cruzarem e refletirem em 
+um único valor; 
+ 
+Passo 14: É possível realizar o filtro diretamente na coluna que você deseja. Clique em Unidade gerencial de origem  e escreva a sua op ção, 
+como por exempo: SP_BR08; 
+ 
+ 
+
+Passo 15: Dessa forma você irá gerar um novo relatório, só que agora somente com os filtros definidos previamente;  
+Passo 16: Uma outra forma de conferir se existe um custo cadastrado é através do PowerBI de Tarifas Vigentes. Nele você pode realizar v ários 
+tipos de filtros: Nome do local de origem, nome do local de destino, quantidade de pallets, etc. 
+Link:https://app.powerbi.com/groups/me/apps/86463261-c686-402c-8aa3-aa8a0dc0f7bb/reports/015e6e0e-4b46-497b-aa90-
+91031c807aee/ReportSectiond0da7c7181e6e4aaddd1?experience=power-bi&clientSideAuth=0 
+• Selecione o tipo que faz coerência com o veículo apresentado e faça o ajuste. Ca lculando o custo após o ajuste é só aguardar a emissão 
+do CTe. Se o custo não calcular e as informações estiverem corretas bem como se igualando ao aplicativo e/ou BI, entre em con tato com 
+o time de fretes para eles colocarem esse custo. 
+• Se não existir cus tos cadastrados para o tipo de veiculo que a planta se depara, é necessário abrir chamado na oferta: 
+https://ambev.service-
+now.com/ambevnow?id=sc_cat_item&table=sc_cat_item&sys_id=5ed4547f1b28249092fdda8fe54bcb03&searchTerm=Falta%20de%20ta
+rifa%20para%20frete%20acionado 
+ 
+ 
+
+TABELA DE X PARA EQUIPAMENTOS 
+ 
+ 
+ 
+ 
+ 
+Grupo Equipamento Observação
+Produto Acabado - CED & CMP - FF R10D Para viagens de 10 paletes (truck)
+Produto Acabado - CED & CMP - FF R14D Para viagens de 14 paletes (truck)
+Produto Acabado - CED & CMP - FF R28D Para viagens de 28 paletes
+Produto Acabado - CED & CMP - FF R30D Para viagens de 30 paletes
+Produto Acabado - CED & CMP - FF R40D Para viagens de 40 paletes - bitrem
+Produto Acabado - CED & CMP - FF R42D Para viagens de 42 paletes - bitrem
+Produto Acabado - CED & CMP - Spot H12S Para viagens de 12 paletes (truck)
+Produto Acabado - CED & CMP - Spot H26S Para viagens de 26 paletes
+Produto Acabado - CED & CMP - Spot H28S Para viagens de 28 paletes
+Produto Acabado - CED & CMP - Spot H40S Para viagens de 40 paletes - bitrem
+Produto Acabado - CED & CMP - Spot H42S Para viagens de 42 paletes - bitrem
+Produto Acabado - CED & CMP - Cmov/Colaborativo C28S Para viagens de 28 paletes
+Produto Acabado - CED & CMP - Chopp K12S Para viagens de 12 paletes (truck)
+Produto Acabado - CED & CMP - Chopp K28S Para viagens de 28 paletes
+ATG - CED & CMP - retorno - Spot H26S Para viagens de 26 paletes
+ATG - CED & CMP - retorno - Spot H28S Para viagens de 28 paletes
+ATG - CED & CMP - retorno - E28S E28S Para viagens com carro semidedicado
+Produto Acabado - CED & CMP - Semidedicada E28S Para viagens de semidedicada/SMOV
+Insumo - Retorno de ATG Insumo O tipo de equipamento é o mesmo da ida exemplo- se foi B28S volta B28S 
+Transferência ATG N28S Para viagens entre fábricas 
+Produto Acabado - ASVD - Spot J12S Truck 12 plt
+Produto Acabado - ASVD - Dedicada J12D Truck 12 plt
+Produto Acabado - ASVD - Spot J28S Carreta de 28 paletes
+Produto Acabado - ASVD - Spot J20S Truck
+Produto Acabado - ASVD - Spot J40S Rodotrem
+Produto Acabado - ASVD - Dedicada J28D Carreta de 28 paletes
+Produto Acabado - ASVD - Dedicada J20D Truck
+Produto Acabado - ASVD - Dedicada J40D Rodotrem
+Produto Acabado - ASVD - Semidedicada E28S Carreta de 28 paletes
+ 
+Grupo Equipamento Observação
+Produto Acabado - ASVD - Semidedicada E20S Truck
+Produto Acabado - ASVD - Semidedicada E40S Rodotrem
+Cabotagem/Ferroviário - Produto Acabado T21S Para as Tps: Brado/Mercosul/Aliança
+Cabotagem/Ferroviário - Tampa de lata V21S Para as Tps: Brado/Mercosul/Aliança
+Cabotagem/Ferroviário - Malte O21S Para as Tps: Brado/Mercosul/Aliança
+Açucar - Spot O24S Carreta de 32 Ton
+Açucar - Spot O40S Carreta de 48 Ton - rodotrem
+Malte - FF O28S Carreta de 35 Ton
+Malte - Spot O28S Carreta de 35 Ton
+Arroz - Spot O28S Carreta 32 Ton
+Arroz - Spot O28S Carreta 32 Ton
+Preforma - Spot P26S Carretas 52 caixas
+High Maltose - Spot X27S Carreta 35 Ton
+Areia/Caco de Vidro - Spot O28S Peso
+Garrafa - Spot B14S Carreta 14 plt
+Garrafa - Spot B24S Carreta 24 plt
+Garrafa - Spot B28S Carreta 28 plt
+Garrafa - Spot B26S Carreta 26 plt
+Garrafa - Spot B30S Carreta 30 plt
+Garrafa - Spot B32S Carreta 32 plt
+Red Bull - Spot N28S Carreta 28 plt
+Lata - FF U25S Bau 25 plt
+Lata - Spot Z16S Bau 16 plt
+Lata - Spot U20S Bau 20 plt
+Lata - Spot U25S Bau 25 plt
+Lata - Spot U40S Bau 40 plt
+Lata - Spot U41S Bau 41 plt
+ATG - Palete/Chapatex/Garrafeira - Fornecedor > Fábrica N20S Viagens até 20 paletes
+ATG - Palete/Chapatex/Garrafeira - Fornecedor > Fábrica N22S Viagens entre 21 e 22 paletes
+ATG - Palete/Chapatex/Garrafeira - Fornecedor > Fábrica N24S Viagens entre 23 e 24 paletes
+ATG - Palete/Chapatex/Garrafeira - Fornecedor > Fábrica N26S Viagens entre 25 e 26 paletes
+ATG - Palete/Chapatex/Garrafeira - Fornecedor > Fábrica N28S Viagens entre 27 e 28 paletes
+ATG - Palete/Chapatex/Garrafeira - Fornecedor > Fábrica Y40S Viagens de 36 a 40 plt - bitrem
+Insumos > Tampa, Filme, Aroma, Suco, Concentrado, Caixa Cartão, Fonolito, Rótulo, Rolha - SpotH10S/H12S/N20S/N22S/N24S/N26S/N28S Depende de quanto está sendo carregado na viagem
+Levedura - Spot O28S e O30S Peso
+Metadados: emissão, cte, frete 
+Autor: Luan Torres/Felipe Passos 
+Data de criação: 12/05/2023 
+Data de modificação: 08/07/2024  
+ 

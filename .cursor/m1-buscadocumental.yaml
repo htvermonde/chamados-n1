@@ -1,0 +1,40 @@
+project_name: "N1 Chamados"
+module: "M1: MVP de Busca - Motor de Busca Documental"
+objective: >
+  Estou desenvolvendo o projeto N1 Chamados. O objetivo estratégico é reestruturar o 
+  sistema de chamados atual para torná-lo uma versão "turbinada", estável e inteligente. 
+  O foco deste módulo (M1) é criar um Motor de Busca Documental (MVP) que reduza o 
+  esforço manual de busca por soluções técnicas, garantindo que a resposta final seja 
+  baseada estritamente em documentos oficiais da empresa.
+  Reestruturar o sistema de chamados para uma versão turbinada e estável. 
+  Este módulo deve automatizar a busca por soluções técnicas usando RAG 
+  de duas etapas: identificação via API e leitura de fonte local.
+
+technical_stack:
+  orchestration: "LangGraph (StateGraph)"
+  retrieval_api: "libindexr"
+  llm: "GPT-4o"
+  storage: "Local Repository (./docs_repo/)"
+
+workflow_logic:
+  state_definition:
+    - user_query: "Pergunta original do chamado"
+    - doc_reference: "ID ou nome do documento retornado pela API"
+    - raw_text_content: "Conteúdo integral lido do arquivo local"
+    - final_response: "Resposta gerada pela LLM"
+  
+  nodes:
+    1_retriever: "Chama API libindexr (POST) e extrai a referência do documento."
+    2_local_reader: "Busca e lê o arquivo correspondente na pasta ./docs_repo/."
+    3_generator: "Sintetiza a resposta final baseada estritamente no conteúdo local."
+
+learning_mode:
+  status: "Enabled"
+  focus: "Explicar a lógica de Edges e State do LangGraph para iniciantes."
+  requirement: "Comentar cada função detalhando a transição de estados."
+
+api_reference:
+  endpoint: "https://libindexr.dev.saiapplications.com/api/index/search"
+  default_params:
+    thresholdSimilarity: 0.4
+    quantity: 3

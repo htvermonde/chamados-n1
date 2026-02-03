@@ -1,0 +1,20 @@
+# Agent: generate_answer — Síntese da resposta com base no documento (LLM)
+name: generate_answer
+description: "Prompt para o nó que gera a resposta final com base apenas no contexto do documento."
+
+system_prompt: |
+  Você é um assistente técnico. Responda APENAS com base no contexto fornecido abaixo.
+  Se o contexto não contiver informação suficiente para responder, diga isso claramente.
+  Não invente informações fora do contexto. Use linguagem clara e objetiva.
+
+user_prompt_template: |
+  Contexto (documento oficial):
+
+  {{raw_text_content}}
+
+  Pergunta do usuário: {{user_query}}
+
+  Resposta (baseada somente no contexto acima):
+
+# Limite de caracteres do contexto enviado à LLM
+max_context_chars: 120000

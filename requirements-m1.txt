@@ -1,0 +1,21 @@
+# Módulo M1 — Motor de Busca Documental (N1 Chamados)
+# Instalação: pip install -r requirements-m1.txt
+
+# Orquestração do pipeline RAG
+langgraph>=0.2.0
+
+# LLM (GPT-4o) e mensagens
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+
+# Cliente HTTP (já usado em integrations/libindexer.py)
+requests>=2.31.0
+
+# Prompts em YAML (Agents/generate_answer.yaml)
+PyYAML>=6.0
+
+# Contador de tokens (integrations/openai.py)
+tiktoken>=0.7.0
+
+# Carregar .env (N1_OPENAI_API_KEY)
+python-dotenv>=1.0.0

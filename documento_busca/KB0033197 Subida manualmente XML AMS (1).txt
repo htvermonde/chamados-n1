@@ -1,0 +1,99 @@
+  SAP S4 Hana 
+   VIM - Subir 
+Manualmente um 
+Arquivo XML 
+KB0033197 
+  
+Problema: VIM - Subir Manualmente um Arquivo XML 
+Ambiente: S4P VIM 
+Solução: Para ação do time N1 ou N2 já que é necessário acesso ao FFID para realizar o processo 
+a seguir. 
+Passo 1 – Verificar qual o tipo de arquivo XML que iremos subir 
+NF-e --> ao abrir o arquivo XML no campo de chave de acesso deve conter a numeração “ 55” no 
+meio. 
+ 
+CT-e --> ao abrir o arquivo XML no campo de chave de acesso deve conter a numeração “57” ou “67”  
+no meio. 
+ 
+NFs --> ao abrir o arquivo XML no campo de chave de acesso deve conter as siglas “PYM” 
+OBS – Caso não tenham o arquivo XML passar o INC para o time SAZ Digital CORE - SWAT L2 - Supply & 
+Planning solicitando o arquivo (Informar o CNPJ do fornecedor e o número da nota)  
+ 
+ 
+ 
+ 
+CTE de serviço --> ao abrir o arquivo XML no campo de chave de acesso deve conter as siglas 
+“UNI” 
+
+ 
+Passo 2 – Sabendo qual tipo de arquivo XML olhar na tabela /OPT/VIM_1HEAD se existe algum ID 
+VIM criado para a chave, caso exista deve verificar qual o status do mesmo, pois não será criado um 
+ID novo para a chave de acesso ID ativo (Mesmo que esteja no limbo ou sem role) é necessário 
+obsoletar o mesmo para subir um novo. 
+ 
+ 
+OBS – Para ID’s com status de cancelado deve se obsoletar também já que o cancelado indica um 
+ID ativo e também não deixa criar um novo com este status. 
+Para ID’s com status de Lançado ou Documento criado deve se orientar ao user estornar os documentos 
+criados, pois caso seja obsoletado o ID VIM irá gerar divergência entre o que constar no report(VA2) 
+contra o contábil, por isso não impede a duplicidade que irá gerar ao subir um novo XML já que o 
+documento criado pelo ID VIM consta ativo. 
+Entrar na transação /AB4/P2P_BR_OBSO_VIM com o número do ID VIM e em seguida executar 
+Onde irá abrir um pop up sendo necessário inserir um motivo e um comentário segue um padrão 
+para atendimento 
+“ID com erro de WF INCXXX”  
+“Subida de um novo XML INCXXX” 
+
+ 
+Passo 3– Caso não tenha nenhum ID VIM criado entrar na transação /AB4/P2P_BR_VIM_XML e de 
+acordo ao tipo do XML chamar a variante correspondente. 
+ 
+BR_SER_CTE --> e o XML de CTE de serviço com a sigla “UNI” (/int2/gap4155/nfse/) 
+Padrão de nome do arquivo – NFs_2924102061882100095099UNI0000236461000000058.xml 
+CTE_FORA --> e o XML de CT-e modelo 57 ou 67(/int2/gap4155/) 
+Padrão de nome do arquivo – CTe_31240904294012000984570020000006481054227879.xml 
+NOTAFORA --> e o XML de NF-e modelo 55 (/int3/gap1799/) 
+Padrão de nome do arquivo – NFe_35241048708267046156550010002875351894085640.xml 
+BR_SER --> e o XML de NFs que tem a sigla “PYM” aqui devemos analisar a qual centro corresponde o 
+XML, pois o caminho da pasta na AL11 irá mudar de acordo ao centro. 
+Padrão de nome do arquivo – NFs_2408280352867000017399000054499PYM0829115339.xml 
+Sendo necessário abrir o XML e verificar na tag ZCENTRO a qual pertence.  
+
+ 
+Caminho da pasta “/PAYMATCH/BRXX/” mudar o “XX” de acordo ao centro 
+OBS – Nem todo centro que é informado no XML é o correspondente no S4P, por isso verificar no link 
+abaixo se esse centro muda no hana. 
+https://anheuserbuschinbev.sharepoint.com/sites/Aurora -RolloutData/SitePages/Pr%C3%B3ximas-
+Unidades.aspx?OR=Teams-
+HL&CT=1728920086666&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOi
+IxNDE1LzI0MDkwMTAxNDIxIiwiSGFzRmVkZXJhdGVkVXNlciI6ZmFsc2V9  
+ 
+Escolhida a variante apertar no botão para buscar o arquivo XML da sua máquina é após isso 
+executar. 
+ 
+Passo 4– Após subir o arquivo pode olhar no caminho da AL11 se o XML consta lá (Deverá aguardar 
+5min para que o arquivo seja consumido pelo job P2P_VIM_NFE_UPLOAD_LINK)  
+Exemplo - 
+ 
+Passo 5– Em seguida poderá acompanhar pela transação /OTX/PF03_WP se criou o REG ID 
+(arquivamento do XML no repositório) aqui deve aguardar o REG ID chegar no status 100 onde irá 
+criar o ID VIM. 
+
+ 
+Caso seja um XML com prioridade para subir é na fila tenha muitos arquivos (mais de 30) pode 
+realizar o processamento manual apertando na pasta de “Processando” é lá dentro buscar o seu 
+REG ID 
+ 
+Apertar no botão da engrenagem 
+ 
+Que fara ela pular a fila que existe para ser executado nesse momento 
+
+ 
+OBS- Sempre aguardar seu REG ID chegar no status 100 ou ver se dará erro, não ficar subindo outro XML 
+que não adiantara, pois ficara na mesma fila. 
+ 
+ 
+Passo 6– Após chegar no status 100 do seu REG ID poderá buscar na tabela da /OPT/VIM_1HEAD  
+com a chave de acesso para saber qual o ID VIM foi criado. 
+ 
+

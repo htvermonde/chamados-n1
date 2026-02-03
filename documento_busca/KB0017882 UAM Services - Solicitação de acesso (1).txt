@@ -1,0 +1,104 @@
+UAM Services -
+Solicitação de acesso.
+Solicitação de acesso não é via Incidente e sim
+via RITM sendo necessário abertura de
+chamado Service Request.
+1
+Criação de usuário, Bloqueio e 
+desbloqueio, Inclusão de acesso 
+adicional.
+1
+Acessar:
+https://abinbevww.service-
+now.com/abiex?id=sc_category_abi&catalog_id=9df4d21e
+1b2a81d0f861a640604bcbd7&sys_id=0fc955961b32c110a
+5ddddf3b24bcbd5
+Conforme indica o catálogo Aurora S4 Hana, para criação
+de acessos, é necessário verificar em qual categoria você
+deseja solicitar:
+• Novo usuário;
+• Usuário bloqueado;
+• Requisição de acesso adicional.
+Passo a passo para cada um dos casos nos próximos
+slides:
+
+UAM Services -
+Solicitação de acesso.
+Solicitação de acesso não é via Incidente e sim
+via RITM sendo necessário abertura de
+chamado Service Request.
+2 Para solicitar criação de novo usuário, clicar em:
+“Criar Usuário”
+Criação de usuário.
+2
+3 Preencher os dados solicitados conforme alinhamento de
+acesso de sua gestão;
+3
+UAM Services -
+Solicitação de acesso.
+Solicitação de acesso não é via Incidente e sim
+via RITM sendo necessário abertura de
+chamado Service Request.
+4 Se seu usuário está bloqueado ou se você é terceiro e a      
+validade expirou, clicar em:
+“Bloquear/ Desbloquear Usuário”
+Bloqueio e desbloqueio
+4
+5 Preencher os dados solicitados conforme alinhamento de 
+acesso de sua gestão;
+5
+
+UAM Services -
+Solicitação de acesso.
+Solicitação de acesso não é via Incidente e sim
+via RITM sendo necessário abertura de
+chamado Service Request.
+6 Se você já possui acesso e algumas transações e deseja 
+solicitar outra transação, clicar em:
+“Requisitar acesso adicional”
+Inclusão de acesso adicional.
+6
+7 Preencher os dados solicitados conforme alinhamento de 
+acesso de sua gestão;
+7
+
+UAM Services -
+Solicitação de acesso.
+Solicitação de acesso não é via Incidente e sim
+via RITM sendo necessário abertura de
+chamado Service Request.
+8 Clicar na aba:
+“Requisitar acesso adicional”
+Erro de autorização ou acesso já 
+concedido:
+8
+9 Preencher os dados solicitados conforme alinhamento de 
+acesso de sua gestão e anexar print do log de erro da tela 
+/NSU53 do SAP . Conforme exemplo no próximo slide:
+9
+
+UAM Services -
+Solicitação de acesso.
+Solicitação de acesso não é via Incidente e sim
+via RITM sendo necessário abertura de
+chamado Service Request.
+Na /NSU53 no SAP tire um print de todo o LOG (lembre-se 
+de pegar todas as partes, pois pode ser necessário que 
+você role a barra de rolagem até o final).”
+Finalize a solicitação do ticket.
+Log de erro /NSU53
+10
+Caso você não tenha acesso a SU53 no sistema SAP , você 
+deve complementar as informações com o log de erro do 
+Fiori:
+1.   Você pode iniciar o Suporte ao Aplicativo diretamente 
+do app.
+2.   Iniciar o Suporte de Aplicativos no menu do usuário.
+3. Clique em ""baixar logs"" e anexe o XLS ao tíquete 
+ServiceNow.
+• Caso você tenha alguma dúvida de qual acesso deve 
+solicitar, verifique com o Key User de sua área se ele 
+pode ajudar a definir o acesso antes de solicitar. 
+11
+10
+11
