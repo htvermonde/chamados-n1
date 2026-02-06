@@ -54,8 +54,11 @@ Variáveis de ambiente sugeridas:
 ## Uso
 
 ```bash
+# Instalar venv
+python -m venv venv
 # Ativar venv
 source venv/bin/activate
+# Instalar dependencias
 pip install -r requirements-m1.txt
 # Coloque N1_OPENAI_API_KEY=sk-... no arquivo .env na raiz do projeto
 python -m m1_busca_documental.run_example "Sua pergunta aqui"

@@ -14,7 +14,6 @@ Ou com pergunta customizada:
   python -m m1_busca_documental.run_example "Como consultar expansão de tipo de avaliação do material?"
 """
 
-import os
 import sys
 
 
@@ -48,10 +47,19 @@ def main():
         print("Documento referenciado:", result.get("doc_reference"))
     usage = result.get("token_usage")
     if usage:
-        print("Tokens:", usage.get("input_tokens"), "in +", usage.get("output_tokens"), "out =", usage.get("total_tokens"), "total")
+        print(
+            "Tokens:",
+            usage.get("input_tokens"),
+            "in +",
+            usage.get("output_tokens"),
+            "out =",
+            usage.get("total_tokens"),
+            "total",
+        )
     print()
     print("Resposta final:")
     print(result.get("final_response", "(nenhuma)"))
+    print("Status de encaminhamento:", result.get("status", "N/A"))
     if result.get("error"):
         print("Erro:", result.get("error"))
 

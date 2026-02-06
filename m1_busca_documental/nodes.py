@@ -18,7 +18,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 # Garante que a raiz do projeto está no path para importar integrations.libindexer
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -268,82 +268,147 @@ def fetch_local_document(state: AgentState) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 # Nó 3: generate_answer — Fase de Síntese (LLM)
 # ---------------------------------------------------------------------------
-def _load_generate_answer_prompt() -> Dict[str, Any]:
-    """Carrega o prompt do agente generate_answer a partir de Agents/generate_answer_v2.yaml."""
+def _load_generate_answer_prompt(version: str = "v3") -> Dict[str, Any]:
+    """Carrega o prompt do agente generate_answer a partir de Agents/generate_answer_{version}.yaml."""
     import yaml
 
     agents_dir = Path(__file__).resolve().parent / "Agents"
-    prompt_path = agents_dir / "generate_answer_v2.yaml"
+    prompt_path = agents_dir / f"generate_answer_{version}.yaml"
+    if not prompt_path.is_file():
+        # Fallback para v2 se v3 não existir por algum motivo
+        prompt_path = agents_dir / "generate_answer_v2.yaml"
+
     if not prompt_path.is_file():
         raise FileNotFoundError(f"Prompt não encontrado: {prompt_path}")
     with open(prompt_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
-def generate_answer(state: AgentState) -> Dict[str, Any]:
+def _parse_llm_response(content: str) -> Tuple[bool, str]:
     """
-    Gera a resposta final usando a LLM (GPT-4o) com contexto exclusivo do documento.
-    O prompt é carregado de m1_busca_documental/Agents/generate_answer_v2.yaml.
+    Extrai a classificação (RELEVANTE/IRRELEVANTE) e limpa o texto da resposta.
+    Esperado: 'CLASSIFICACAO: RELEVANTE\n\nResposta...'
+    """
+    is_relevant = True
+    clean_content = content.strip()
 
-    Entrada (do estado): user_query, raw_text_content
-    Saída (atualiza o estado): final_response, retrieved_document
-    """
+    match = re.search(
+        r"CLASSIFICACAO:\s*(RELEVANTE|IRRELEVANTE)", clean_content, re.IGNORECASE
+    )
+    if match:
+        label = match.group(1).upper()
+        is_relevant = label == "RELEVANTE"
+        # Remove a linha da classificação do texto final
+        clean_content = re.sub(
+            r"CLASSIFICACAO:.*?\n+", "", clean_content, flags=re.IGNORECASE
+        ).strip()
+
+    return is_relevant, clean_content
+
+
+def _call_llm_for_answer(state: AgentState) -> Tuple[str, Optional[Dict[str, int]]]:
+    """Faz a chamada à LLM usando o prompt v3 que inclui classificação."""
     from m1_busca_documental.config import OPENAI_API_KEY, LLM_MODEL
-    print("OPENAI_API_KEY:", OPENAI_API_KEY)
-    print("LLM_MODEL:", LLM_MODEL)
+    from integrations.openai import OpenAIIntegration
 
     user_query = (state.get("user_query") or "").strip()
     raw_text_content = state.get("raw_text_content") or ""
+
+    prompt_config = _load_generate_answer_prompt("v3")
+    system_prompt = (prompt_config.get("system_prompt") or "").strip()
+    user_template = (prompt_config.get("user_prompt_template") or "").strip()
+    max_chars = int(prompt_config.get("max_context_chars") or 120000)
+
+    raw_slice = raw_text_content[:max_chars]
+    user_prompt = user_template.replace("{{raw_text_content}}", raw_slice).replace(
+        "{{user_query}}", user_query
+    )
+
+    client = OpenAIIntegration(
+        api_key=OPENAI_API_KEY,
+        model=LLM_MODEL,
+        temperature=0,
+    )
+    return client.invoke(system_prompt=system_prompt, user_prompt=user_prompt)
+
+
+def generate_answer(state: AgentState) -> Dict[str, Any]:
+    """
+    Gera a resposta final usando a LLM (GPT-4o).
+    Agora avalia se o KB é coerente; se não for, gera uma sugestão e sinaliza para consultor.
+
+    Entrada (do estado): user_query, raw_text_content
+    Saída (atualiza o estado): final_response, is_kb_relevant, is_suggestion, needs_consultant
+    """
+    from m1_busca_documental.config import OPENAI_API_KEY
+
     doc_path = state.get("doc_path") or ""
     err = state.get("error")
 
     if err:
         return {
-            "final_response": f"Não foi possível gerar a resposta: {err}",
+            "final_response": f"Não foi possível processar a solicitação: {err}",
+            "is_kb_relevant": False,
+            "needs_consultant": True,
         }
 
-    if not raw_text_content:
+    if not state.get("raw_text_content"):
         return {
-            "final_response": "Nenhum conteúdo de documento foi encontrado para basear a resposta. Verifique a pergunta ou a referência retornada pela busca.",
+            "final_response": "Nenhum documento encontrado. Por favor, aguarde enquanto um consultor analisa sua dúvida.",
+            "is_kb_relevant": False,
+            "is_suggestion": True,
+            "needs_consultant": True,
         }
 
     if not OPENAI_API_KEY:
         return {
-            "final_response": "[Configuração] N1_OPENAI_API_KEY não definida. Defina no .env ou variável de ambiente para usar a LLM.",
+            "final_response": "[Configuração] API Key ausente.",
+            "error": "API Key ausente.",
         }
 
     try:
-        from integrations.openai import OpenAIIntegration
+        # 1. Chamada à LLM (delegada para função interna)
+        raw_response, token_usage = _call_llm_for_answer(state)
 
-        prompt_config = _load_generate_answer_prompt()
-        system_prompt = (prompt_config.get("system_prompt") or "").strip()
-        user_template = (prompt_config.get("user_prompt_template") or "").strip()
-        max_chars = int(prompt_config.get("max_context_chars") or 120000)
+        # 2. Parse da resposta (delegada para função interna)
+        is_relevant, final_response = _parse_llm_response(raw_response)
 
-        raw_slice = raw_text_content[:max_chars]
-        user_prompt = user_template.replace("{{raw_text_content}}", raw_slice).replace(
-            "{{user_query}}", user_query
-        )
-
-        client = OpenAIIntegration(
-            api_key=OPENAI_API_KEY,
-            model=LLM_MODEL,
-            temperature=0,
-        )
-        final_response, token_usage = client.invoke(
-            system_prompt=system_prompt,
-            user_prompt=user_prompt,
-        )
-    except FileNotFoundError as e:
-        final_response = f"[Configuração] Prompt não encontrado: {e}"
-        token_usage = None
     except Exception as e:
         final_response = f"Erro ao gerar resposta com a LLM: {e!s}"
         token_usage = None
+        is_relevant = False
 
+    # 3. Retorno do estado com as novas flags de controle
     return {
         "final_response": final_response,
+        "is_kb_relevant": is_relevant,
+        "is_suggestion": not is_relevant,
+        "needs_consultant": not is_relevant,  # Se não for relevante, vai para o consultor
         "retrieved_document": state.get("retrieved_document"),
         "token_usage": token_usage,
         "doc_path": doc_path,
     }
+
+
+# ---------------------------------------------------------------------------
+# Nó 4: forward_to_user — Encaminhamento para o usuário
+# ---------------------------------------------------------------------------
+def forward_to_user(state: AgentState) -> Dict[str, Any]:
+    """
+    Nó acionado quando a resposta foi encontrada no KB com sucesso.
+    Pode ser usado para logs, métricas ou integrações de saída direta.
+    """
+    print(">>> Fluxo: Encaminhando resposta do KB para o usuário.")
+    return {"status": "forwarded_to_user"}
+
+
+# ---------------------------------------------------------------------------
+# Nó 5: forward_to_attendant — Encaminhamento para atendente
+# ---------------------------------------------------------------------------
+def forward_to_attendant(state: AgentState) -> Dict[str, Any]:
+    """
+    Nó acionado quando a pergunta não foi respondida pelo KB.
+    Encaminha para um consultor/atendente humano.
+    """
+    print(">>> Fluxo: Pergunta sem resposta no KB. Encaminhando para atendente.")
+    return {"status": "forwarded_to_attendant"}

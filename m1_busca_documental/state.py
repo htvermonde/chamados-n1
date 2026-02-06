@@ -36,6 +36,7 @@ class AgentState(TypedDict, total=False):
     - error: mensagem de erro, se algum nó falhar (útil para debugging).
     - api_response: resposta bruta da API (opcional, para inspeção).
     """
+
     user_query: str
     doc_reference: Optional[str]
     doc_references: Optional[List[Any]]
@@ -49,3 +50,7 @@ class AgentState(TypedDict, total=False):
     token_usage: Optional[Dict[str, int]]
     error: Optional[str]
     api_response: Optional[Any]
+    is_kb_relevant: Optional[bool]
+    is_suggestion: Optional[bool]
+    needs_consultant: Optional[bool]
+    status: Optional[str]

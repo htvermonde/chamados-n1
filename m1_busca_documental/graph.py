@@ -30,16 +30,37 @@ from m1_busca_documental.nodes import (
     call_libindexr,
     fetch_local_document,
     generate_answer,
+    forward_to_user,
+    forward_to_attendant,
 )
 from m1_busca_documental.state import AgentState
 
 
+def decide_next_node(state: AgentState):
+    """
+    Decide qual o próximo nó após a geração da resposta.
+    Se is_kb_relevant for True, vai para forward_to_user.
+    Caso contrário, vai para forward_to_attendant.
+    """
+    if state.get("is_kb_relevant") is True:
+        return "forward_to_user"
+    return "forward_to_attendant"
+
+
 def build_rag_graph():
     """
-    Constrói e compila o grafo RAG de 2 etapas.
+    Constrói e compila o grafo RAG de 2 etapas com encaminhamento condicional.
 
     Fluxo:
-        START → call_libindexr → fetch_local_document → generate_answer → END
+        START → call_libindexr → fetch_local_document → generate_answer
+                                                              |
+                                           ----------------------------------
+                                           |                                |
+                                   [Doc Relevante?]                 [Doc Irrelevante?]
+                                           |                                |
+                                   forward_to_user                  forward_to_attendant
+                                           |                                |
+                                         END                              END
 
     Retorno:
         CompiledStateGraph: use .invoke({"user_query": "..."}) para executar.
@@ -47,17 +68,31 @@ def build_rag_graph():
     # StateGraph(AgentState) indica que o estado do grafo segue o formato AgentState
     graph = StateGraph[AgentState, None, AgentState, AgentState](AgentState)
 
-    # Registrar os três nós (cada um é uma função state -> partial state)
+    # Registrar os nós
     graph.add_node("call_libindexr", call_libindexr)
     graph.add_node("fetch_local_document", fetch_local_document)
     graph.add_node("generate_answer", generate_answer)
+    graph.add_node("forward_to_user", forward_to_user)
+    graph.add_node("forward_to_attendant", forward_to_attendant)
 
     # Definir as bordas (edges): ordem de execução
-    # START e END são constantes do LangGraph para entrada e saída do grafo
     graph.add_edge(START, "call_libindexr")
     graph.add_edge("call_libindexr", "fetch_local_document")
     graph.add_edge("fetch_local_document", "generate_answer")
-    graph.add_edge("generate_answer", END)
+
+    # Borda condicional após generate_answer
+    graph.add_conditional_edges(
+        "generate_answer",
+        decide_next_node,
+        {
+            "forward_to_user": "forward_to_user",
+            "forward_to_attendant": "forward_to_attendant",
+        },
+    )
+
+    # Bordas finais
+    graph.add_edge("forward_to_user", END)
+    graph.add_edge("forward_to_attendant", END)
 
     return graph.compile()
 
